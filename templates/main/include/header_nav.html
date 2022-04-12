@@ -1,0 +1,51 @@
+{% load static %}
+
+{% block header %}
+      <div class="container pre-nav d-none d-md-block">
+        <div class="row align-items-center">
+          <div class="col-2 pl-0 py-2 text-nowrap"><a class="top-logo" href="/">myqr<span></span> dev</a></div>
+          <div class="col-4 p-2 text-center"><a class="top-phone" href="tel:+78005005050">+7 800 500-50-50</a></div>
+          <div class="col-3 p-2 text-center"><a class="top-mail" href="mailto:mail@info@info.com">info@info.com</a></div>
+          <div class="col-3 p-2 text-nowrap text-right">
+            <div class="btn-lk-form btn-purple" tabindex="0">Личный кабинет<button class="btn rounded-0" data-toggle="modal" data-target="#enterForm">Вход<i class="bi bi-arrow-right ml-2"></i></button></div>
+          </div>
+        </div>
+      </div>
+      <nav class="navbar navbar-expand-md">
+        <div class="container p-0">
+          <a class="navbar-brand d-md-none" href="/">myqr<span></span> dev</a>
+          <div class="icon-box d-flex align-items-center text-center">
+            <button class="navbar-toggler d-block d-md-none mt-1 mr-4" type="button" data-toggle="modal" data-target="#enterForm"><span class="navbar-toggler-icon lk-icon"></span></button>
+            <button class="navbar-toggler collapsed ml-2" type="button" data-toggle="collapse" data-target="#navbarsMenu" aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon mobile-nav"></span></button>
+          </div>
+          <div class="navbar-collapse collapse" id="navbarsMenu">
+            <ul class="navbar-nav mr-auto">
+              {% url '/' as url_main %}
+              <li class="nav-item {% if  request.path == '/' %}active{% endif %} ">
+                <a class="nav-link px-0" href="/">Главная</a>
+              </li>
+              {% url 'qr_tatu' as url_qr_tatu %}
+              <li class="nav-item {% if  url_qr_tatu == request.path %}active{% endif %}">
+                <a class="nav-link text-nowrap px-0" href="{% url 'qr_tatu'  %}">QR-тату<span class="sr-only">(текущая страница)</span></a>
+              </li>
+               {% url 'for_bisnes' as url_for_bisnes %}
+              <li class="nav-item {% if  url_for_bisnes == request.path %}active{% endif %}">
+                <a class="nav-link px-0" href="{% url 'for_bisnes'  %}">Для малого<br>бизнеса</a>
+              </li>
+              {% url 'for_using' as url_for_using %}
+              <li class="nav-item {% if  url_for_using == request.path %}active{% endif %}">
+                <a class="nav-link px-0" href="{% url 'for_using'  %}">Для повседневного<br>пользования</a>
+              </li>
+              {% url 'subscription' as url_subscription %}
+              <li class="nav-item {% if  url_subscription == request.path %}active{% endif %}">
+                <a class="nav-link px-0" href="{% url 'subscription'  %}">Подписка</a>
+              </li>
+              {% url 'faq' as url_faq %}
+              <li class="nav-item {% if  url_faq == request.path %}active{% endif %}">
+                <a class="nav-link px-0" href="{% url 'faq'  %}">FAQ</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+{% endblock header %}

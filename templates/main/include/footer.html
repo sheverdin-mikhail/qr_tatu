@@ -1,0 +1,45 @@
+{% load static %}
+
+{% block footer %}
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-4 col-md-6"></div>
+        <div class="col-8 col-md-6 text-md-left">
+          <div class="row mb-3 mb-md-5">
+            <div class="col-12 mt-n4 mt-md-0"><a class="footer-logo" href="/">myqr<span></span> dev</a></div>
+            <div class="col-md-6 d-flex flex-column text-left mb-0 mb-md-4">
+              <a class="footer-nav" href="{% url 'index' %}">Главная</a>
+              <a class="footer-nav" href="{% url 'qr_tatu' %}">QR-тату</a>
+              <a class="footer-nav" href="{% url 'for_bisnes' %}">Для малого<br>бизнеса</a>
+              <a class="footer-nav" href="{% url 'for_using' %}">Для повседневного<br>пользования</a>
+            </div>
+            <div class="col-md-6 d-flex flex-column text-left mb-2 mb-md-4">
+              <a class="footer-nav" href="{% url 'subscription' %}">Подписки</a>
+              <a class="footer-nav" href="/">Контакты</a>
+              <a class="footer-nav" href="{% url 'faq' %}">FAQ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row flex-md-row-reverse">
+        <div class="col-md-6">
+          <div class="row flex-md-column-reverse">
+            <div class="col-12 text-center text-md-left mb-3 mb-md-0">
+              <a class="mr-3" href="#"><img src="{% static 'img/fb_icon.svg' %}" alt=""></a>
+              <a class="mx-4" href="#"><img src="{% static 'img/inst_icon.svg' %}" alt=""></a>
+              <a class="ml-3" href="#"><img src="{% static 'img/tg_icon.svg' %}" alt=""></a>
+            </div>
+            <div class="col-6 col-md-12 text-center text-md-left mb-md-4"><a class="footer-mail" href="mailto:mail@info@info.com">info@info.com</a></div>
+            <div class="col-6 col-md-12 text-center text-md-left"><a class="footer-phone" href="tel:+78005005050">+7 800 500-50-50</a></div>
+          </div>
+        </div>
+        <div class="col-md-6 text-center pt-2 pt-md-5">
+          <button class="btn btn-outline-dark rounded-0 mt-md-3" type="button" data-toggle="modal" data-target="#enterForm">Личный кабинет</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+{% endblock footer %}
