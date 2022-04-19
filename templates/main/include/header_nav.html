@@ -7,7 +7,10 @@
           <div class="col-4 p-2 text-center"><a class="top-phone" href="tel:+78005005050">+7 800 500-50-50</a></div>
           <div class="col-3 p-2 text-center"><a class="top-mail" href="mailto:mail@info@info.com">info@info.com</a></div>
           <div class="col-3 p-2 text-nowrap text-right">
-            <div class="btn-lk-form btn-purple" tabindex="0">Личный кабинет<button class="btn rounded-0" data-toggle="modal" data-target="#enterForm">Вход<i class="bi bi-arrow-right ml-2"></i></button></div>
+            {% if user.is_authenticate %}
+            {% else %}
+              <div class="btn-lk-form btn-purple" tabindex="0">Личный кабинет<button class="btn rounded-0" data-toggle="modal"  data-target="#enterForm">Вход<i id="openModal" class="bi bi-arrow-right ml-2"></i></button></div>
+            {% endif %}
           </div>
         </div>
       </div>

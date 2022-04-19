@@ -25,14 +25,16 @@ $(document).ready(function() {
       $('#loginForm').css('display','none');
       $('#validAgeForm').css('display','block');
     });  //.animate({width: '100%'}, 600 )
-    $('#confirmAge').on('click', function(){
-      $('#validAgeForm').css('display','none');
-      $('#createUserForm').css('display','block');
-    });
+//    $('#confirmAge').on('click', function(){
+//          $('#validAgeForm').css('display','none');
+//          $('#createUserForm').css('display','block');
+//        });
     $('#resetStep').on('click', function(){
       $('body .modal-box .modal-dialog').removeClass('modal-xl');
       $('#loginForm').css('display','block');
       $('#validAgeForm').css('display','none');
       $('#createUserForm').css('display','none');
     });
+
 });
+

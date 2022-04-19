@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <body class="main-page">
+    <header>
+      {% include 'main/include/header_nav.html' %}
+      <div class="container">
+        <div class="row">
+          <div class="col-7 page-banner-text">
+            <h1><span>1</span> QR-код и<br>разные ссылки</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="promo-service">
+        <div class="container">
+          <img class="d-none d-md-block" src="{% static 'img/rect_3.png' %}">
+          <div class="row">
+            <div class="col-lg-7 txt-block">
+              <h2 class="pb-md-3 mb-4">Регистрация прошла успешно!</h2>
+              <div class="row">
+                <div class="col-12 text-left mb-3 pb-md-3">
+                  <p>На вашу почту пришло сообщение, перейдите по ссылке для подтверждения почты</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {% include 'main/include/footer.html' %}
+    {% include 'main/include/modal.html' %}
+
+{% endblock body %}
+
