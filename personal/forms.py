@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     AuthenticationForm
 )
 from django.core.exceptions import ValidationError
+from django import forms
 
 from .models import User
 from .utils import send_email_for_verify
@@ -39,3 +40,9 @@ class LoginForm(AuthenticationForm):
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
+
+
+class PersonalInfoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['phone', 'surname', 'first_name', 'last_name']

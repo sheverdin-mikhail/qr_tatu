@@ -1,11 +1,5 @@
 $(document).ready(function(){
-    var dateMask = IMask(
-      document.getElementById('Birthday'), {
-        mask: Date,
-        min: new Date(1990, 0, 1),
-        max: new Date(),
-        lazy: true,
-      });
+
     $('#invalidCheck').on('click', function(){
         if($('#invalidCheck').is(':checked')){
             $('#confirmAge').prop('disabled', false)
@@ -41,4 +35,13 @@ $(document).ready(function(){
             $('#invalidCheck').prop('disabled', true)
           }
     });
+
+   //Снимает с disable поля и кнопку с данными в лк
+    $('#changeMyInformation').on('click', function(){
+        var inputs = $(this).closest('form').find('input')
+        $(this).closest('form').find('#submitButton').prop('disabled', false)
+        inputs.each(function(){
+            $(this).prop('disabled', false)
+            })
+    })
 })

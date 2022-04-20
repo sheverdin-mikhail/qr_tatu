@@ -18,4 +18,5 @@ urlpatterns = [
     path('lk/', views.PersonalCabinet.as_view(),
          name='personal'
          ),
+    path('change_info/', views.ChangeInfo.as_view(), name='change_info'),
 ]

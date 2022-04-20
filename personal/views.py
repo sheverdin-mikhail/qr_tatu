@@ -9,8 +9,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.conf import settings
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, PersonalInfoForm
 from .utils import send_email_for_verify
+from .models import User
 
 User = get_user_model()
 
@@ -43,8 +44,11 @@ class PersonalCabinet(View):
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        context = {
 
+        user = User.objects.get(pk=request.user.pk)
+        form = PersonalInfoForm(instance=user)
+        context = {
+            'form': form,
         }
 
         return render(request, 'personal/lk.html', context)
@@ -69,3 +73,14 @@ class PersonalLogin(LoginView):
     template_name = 'main/index.html'
 
 
+class ChangeInfo(View):
+    def post(self, request):
+        form = PersonalInfoForm(data=request.POST or None)
+        info = User.objects.get(pk=request.user.pk)
+        if form.is_valid():
+            info.first_name = form.cleaned_data.get('first_name')
+            info.last_name = form.cleaned_data.get('last_name')
+            info.surname = form.cleaned_data.get('surname')
+            info.phone = form.cleaned_data.get('phone')
+            info.save()
+        return redirect('personal')

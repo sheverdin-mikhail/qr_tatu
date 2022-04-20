@@ -24,33 +24,63 @@ class IndexView(FromsMixin, View):
 class QrTatuView(View):
 
     def get(self, request):
-        context = {}
+        register_form = RegisterForm()
+        login_form = LoginForm()
+
+        context = {
+            'register_form': register_form,
+            'form': login_form
+        }
         return render(request, 'main/qr_tatu.html', context)
 
 
 class ForBisnesView(View):
 
     def get(self, request):
-        context = {}
+        register_form = RegisterForm()
+        login_form = LoginForm()
+
+        context = {
+            'register_form': register_form,
+            'form': login_form
+        }
         return render(request, 'main/for_bisnes.html', context)
 
 
 class ForUsingView(View):
 
     def get(self, request):
-        context = {}
+        register_form = RegisterForm()
+        login_form = LoginForm()
+
+        context = {
+            'register_form': register_form,
+            'form': login_form
+        }
         return render(request, 'main/for_using.html', context)
 
 
 class SubscriptionView(View):
 
     def get(self, request):
-        context = {}
+        register_form = RegisterForm()
+        login_form = LoginForm()
+
+        context = {
+            'register_form': register_form,
+            'form': login_form
+        }
         return render(request, 'main/subscription.html', context)
 
 
 class FaqView(View):
 
     def get(self, request):
-        context = {}
+        register_form = RegisterForm()
+        login_form = LoginForm()
+
+        context = {
+            'register_form': register_form,
+            'form': login_form
+        }
         return render(request, 'main/faq.html', context)

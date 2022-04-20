@@ -94,32 +94,45 @@
                 </div>
               </div>
               <div class="controls-item" id="userProfile">
-                <form class="col-lg-10 p-0">
+                <form class="col-lg-10 p-0" action="{% url 'change_info' %}" method="post">
+                  {% csrf_token %}
                   <div class="form-row">
                     <div class="col-md-6 mb-3 pr-md-3">
                       <label for="validationDefault01">Ваше имя<span>*</span></label>
-                      <input type="text" class="form-control" id="validationDefault01" placeholder="Александр" required>
+                      <input type="text" class="form-control"
+                             name='{{ form.first_name.html_name }}'
+                             {% if form.first_name.value %}value="{{ form.first_name.value }}"{% endif %}
+                             id="validationDefault01" disabled placeholder="Александр" required>
                     </div>
                     <div class="col-md-6 mb-3 pl-md-3">
                       <label for="validationDefault02">Фамилия<span>*</span></label>
-                      <input type="text" class="form-control" id="validationDefault02" placeholder="Галицин" required>
+                      <input type="text" class="form-control"
+                             name='{{ form.last_name.html_name }}'
+                             {% if form.last_name.value %}value="{{ form.last_name.value }}"{% endif %}
+                             id="validationDefault02" disabled placeholder="Галицин" required>
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="col-md-6 mb-3 pr-md-3">
                       <label for="validationDefault03">Отчество<span>*</span></label>
-                      <input type="text" class="form-control" id="validationDefault03" placeholder="Владимирович" required>
+                      <input type="text" class="form-control"
+                             name='{{ form.surname.html_name }}'
+                             {% if form.surname.value %}value="{{ form.surname.value }}"{% endif %}
+                             id="validationDefault03" disabled placeholder="Владимирович" required>
                     </div>
                     <div class="col-md-6 mb-5 pl-md-3">
                       <label for="validationDefault05">Телефон<span>*</span></label>
-                      <input type="text" class="form-control" id="validationDefault05" placeholder="+7 (123) 45 - 67 - 88" required>
+                      <input type="text" class="form-control"
+                             name='{{ form.phone.html_name }}'
+                             {% if form.phone.value %}value="{{ form.phone.value }}"{% endif %}
+                             id="validationDefault05" disabled placeholder="+7 (123) 45 - 67 - 88" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                      <button class="btn btn-dark text-uppercase rounded-0" type="button">Изменить данные</button>
+                      <button class="btn btn-dark text-uppercase rounded-0" id="changeMyInformation" type="button">Изменить данные</button>
                     </div>
                     <!--  <div class="col-md-2 mr-md-1 ml-md-2"></div>  -->
                     <div class="col-md-6 mb-3">
-                      <button class="btn btn-purple text-uppercase rounded-0" type="submit">сохранить</button>
+                      <button class="btn btn-purple text-uppercase rounded-0" disabled id="submitButton" type="submit">сохранить</button>
                     </div>
                   </div>
 
@@ -389,4 +402,11 @@
         </div>
       </div>
     </section>
+    <script>
+      var dateMask = IMask(
+      document.getElementById('validationDefault05'), {
+        mask: '+7 (000) 000-00-00',
+        lazy: true,
+      });
+    </script>
 {% endblock body %}

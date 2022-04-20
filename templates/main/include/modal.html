@@ -139,14 +139,17 @@
 {% url 'login' as login_url %}
 <script>
 
+  var dateMask = IMask(
+  document.getElementById('Birthday'), {
+    mask: Date,
+    min: new Date(1990, 0, 1),
+    max: new Date(),
+    lazy: true,
+  });
   $(document).ready(function(){
       if('{{ login_url }}' == '{{ request.path }}'){
-         console.log('true')
          $('#openModal').trigger('click');
-      }else{
-        console.log('false')
       }
-
   })
 </script>
 {% endblock modal %}
