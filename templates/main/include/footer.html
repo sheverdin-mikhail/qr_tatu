@@ -36,7 +36,24 @@
           </div>
         </div>
         <div class="col-md-6 text-center pt-2 pt-md-5">
-          <button class="btn btn-outline-dark rounded-0 mt-md-3" type="button" data-toggle="modal" data-target="#enterForm">Личный кабинет</button>
+          <button id="lk_link" class="btn btn-outline-dark rounded-0 mt-md-3" type="button"
+                  {% if not user.is_authenticated %}data-toggle="modal" data-target="#enterForm"{% endif %}>
+            {% if user.is_authenticated %}
+            <style>
+              #lk_link a{
+                color: #000;
+              }
+              #lk_link:hover a{
+                color: #fff;
+              }
+            </style>
+              <a  href="{% url 'personal' %}">
+                Личный кабинет
+              </a>
+            {% else %}
+              Личный кабинет
+            {% endif %}
+          </button>
         </div>
       </div>
     </div>

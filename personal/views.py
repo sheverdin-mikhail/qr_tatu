@@ -11,7 +11,7 @@ from django.conf import settings
 
 from .forms import RegisterForm, LoginForm, PersonalInfoForm
 from .utils import send_email_for_verify
-from .models import User
+from .models import User, Subscription
 
 User = get_user_model()
 
@@ -20,9 +20,10 @@ class VerifyEmailConfirm(View):
     def get(self, request, uidb64, token):
         user = self.get_user(uidb64)
         token = token_generator.check_token(user, token)
-
+        free_sub = Subscription.objects.filter(free_sub=True).first()
         if user is not None and token:
             user.email_verify = True
+            user.subscription = free_sub
             user.save()
             login(request, user)
             return HttpResponseRedirect('/lk')
@@ -58,11 +59,13 @@ class PersonalRegister(View):
 
     def post(self, request, *args, **kwargs):
         register_form = RegisterForm(data=request.POST)
+
         if register_form.is_valid():
             register_form.save()
             email = register_form.cleaned_data.get('email')
             password = register_form.cleaned_data.get('password1')
             user = authenticate(email=email, password=password)
+
             send_email_for_verify(request, user)
             return redirect('verify_email')
         return HttpResponseRedirect('/lk')

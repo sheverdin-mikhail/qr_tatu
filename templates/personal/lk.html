@@ -5,47 +5,7 @@
 {% block body %}
   <body class="lk-page">
     <header>
-      <div class="container pre-nav d-none d-md-block">
-        <div class="row align-items-center">
-          <div class="col-2 pl-0 py-2 text-nowrap"><a class="top-logo" href="/">myqr<span></span> dev</a></div>
-          <div class="col-4 p-2 text-center"><a class="top-phone" href="tel:+78005005050">+7 800 500-50-50</a></div>
-          <div class="col-3 p-2 text-center"><a class="top-mail" href="mailto:mail@info@info.com">info@info.com</a></div>
-          <div class="col-3 p-2 text-nowrap text-right">
-            <div class="btn-lk-form btn-purple" tabindex="0">Личный кабинет<button class="btn rounded-0" data-toggle="modal" data-target="#logOutForm">Выход<i class="bi bi-arrow-right ml-2"></i></button></div>
-          </div>
-        </div>
-      </div>
-      <nav class="navbar navbar-expand-md">
-        <div class="container p-0">
-          <a class="navbar-brand d-md-none" href="/">myqr<span></span> dev</a>
-          <div class="icon-box d-flex align-items-center text-center">
-            <button class="navbar-toggler d-block d-md-none mt-1 mr-4" type="button" data-toggle="modal" data-target="#logOutForm"><span class="navbar-toggler-icon lk-icon"></span></button>
-            <button class="navbar-toggler collapsed ml-2" type="button" data-toggle="collapse" data-target="#navbarsMenu" aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon mobile-nav"></span></button>
-          </div>
-          <div class="navbar-collapse collapse" id="navbarsMenu">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link px-0" href="/">Главная</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-nowrap px-0" href="qr_tatu.html">QR-тату</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link px-0" href="for_bisnes.html">Для малого<br>бизнеса</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link px-0" href="for_using.html">Для повседневного<br>пользования</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link px-0" href="subscription.html">Подписка</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link px-0" href="faq.html">FAQ</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      {% include 'main/include/header_nav.html' %}
       <div class="container">
         <div class="row">
           <div class="col-md-3 page-banner-text">
@@ -313,7 +273,6 @@
         </div>
       </section>
     </main>
-    {% include 'main/include/footer.html' %}
     <section class="lk-modal-box">
       <div class="modal fade" id="logOutForm" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -364,6 +323,7 @@
         </div>
       </div>
     </section>
+    {% include 'main/include/footer.html' %}
     <script>
       var dateMask = IMask(
       document.getElementById('validationDefault05'), {
