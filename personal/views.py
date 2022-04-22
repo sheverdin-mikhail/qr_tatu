@@ -48,8 +48,10 @@ class PersonalCabinet(View):
 
         user = User.objects.get(pk=request.user.pk)
         form = PersonalInfoForm(instance=user)
+        subs = Subscription.objects.all().order_by('id')
         context = {
             'form': form,
+            'subs': subs,
         }
 
         return render(request, 'personal/lk.html', context)

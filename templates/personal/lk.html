@@ -216,54 +216,65 @@
               <div class="controls-item" id="userSubscription">
                 <!--  <img class="like-hand d-none d-md-block" src="img/like_hand.png" alt="">  -->
                 <p class="subscribe-status mb-4 mb-md-5">Ваша подписка:<span class="ml-4"> Бесплатная</span></p>
-                <div class="card-group">
-                  <div class="card">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Бесплатная<br>подписка</h5>
-                      <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки раз в полгода</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>10% скидки на все услуги партнеров</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать до 5 QR-кодов</p>
-                      <p class="caption card-text d-flex align-items-center mt-4">5 обращений в<br>техподдержку в год</p>
-                    </div>
-                    <div class="card-footer text-center bg-transparent border-0 p-0">
-                      <p>ваш план</p>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Платная<br>подписка 1</h5>
-                      <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>неограниченная смена QR-ссылки</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>10% скидки на все услуги партнеров</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать до 5 QR-кодов</p>
-                      <p class="caption card-text d-flex align-items-center mt-4 mb-3">10% скидки на все услуги<br>патнеров</p>
-                      <p class="big-caption card-text d-flex align-items-center mb-4">2000 р/мес<br>20000 р/год</p>
-                    </div>
-                    <div class="card-footer text-center bg-transparent border-0 p-0">
-                      <button class="btn btn-purple text-uppercase rounded-0" type="button">купить план</button>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Платная<br>подписка 2</h5>
-                      <p class="mb-3 text-uppercase text-nowrap"><img class="mr-2 mr-lg-4" src="{% static 'img/smal_qr_dark.svg' %}" alt="">полный доступ</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>неограниченная смена QR-ссылки</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>10% скидки на все услуги партнеров</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>пароль блокировки страницы</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>личная страница пользователя<br>(внутренний сайт)</p>
-                      <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность создавать до 5 QR-кодов</p>
-                      <p class="card-text d-flex align-items-center caption mt-4 mb-3">Татуировка переводилка<br>в подарок</p>
-                      <p class="big-caption card-text d-flex align-items-center mb-4">2000 р/мес<br>20000 р/год</p>
-                    </div>
-                    <div class="card-footer text-center bg-transparent border-0 p-0">
-                      <button class="btn btn-purple text-uppercase rounded-0" type="button">купить план</button>
-                    </div>
-                  </div>
+                <div class="card-group d-flex flex-wrap ">
+                  {% for sub in subs %}
+                    {% if user.subscription == sub %}
+                      <div class="card">
+                        <div class="card-body d-flex flex-column">
+                          <h5 class="card-title">{{ sub.name }}</h5>
+                          <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
+                          {% if sub.change_link %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                          {% endif %}
+                          {% if sub.discount %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          {% endif %}
+                          {% if sub.lock_password %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
+                          {% endif %}
+                          {% if sub.personal_site %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
+                          {% endif %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
+                          {% if sub.support %}
+                            <p class="caption card-text d-flex align-items-center mt-4">{{ sub.support_count }} обращений в<br>техподдержку в год</p>
+                          {% endif %}
+                        </div>
+                        <div class="card-footer text-center bg-transparent border-0 p-0">
+                          <p>ваш план</p>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                  {% for sub in subs %}
+                    {% if user.subscription != sub %}
+                      <div class="card">
+                        <div class="card-body d-flex flex-column">
+                          <h5 class="card-title">{{ sub.name }}</h5>
+                          <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
+                          {% if sub.change_link %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                          {% endif %}
+                          {% if sub.discount %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          {% endif %}
+                          {% if sub.lock_password %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
+                          {% endif %}
+                          {% if sub.personal_site %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
+                          {% endif %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
+                          {% if sub.support %}
+                            <p class="caption card-text d-flex align-items-center mt-4">{{ sub.support_count }} обращений в<br>техподдержку в год</p>
+                          {% endif %}
+                        </div>
+                        <div class="card-footer text-center bg-transparent border-0 p-0">
+                          <button class="btn btn-purple text-uppercase rounded-0" type="button">купить план</button>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
                 </div>
               </div>
               <div class="controls-item" id="userSite">   </div>

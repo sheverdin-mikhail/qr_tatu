@@ -1401,6 +1401,8 @@ footer .btn-outline-dark:hover {
 #userSubscription .card {
     color: #000000;
     max-width: 360px;
+    min-width: 358px;
+    margin-bottom: 15px;
 }
 #userSubscription .card:first-child {
     border-color: #874FCE !important;
