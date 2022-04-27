@@ -21,11 +21,11 @@
             <div class="col-xl-1"></div>
             <div class="user-nav col-md-4 col-xl-3 pr-md-0">
               <select id="mobileNav" class="form-select d-block d-md-none" aria-label="Navigation menu">
-                <option data-select="selectCode" selected>Выбор QR-кода</option>
-                <option data-select="userProfile">Мои данные</option>
-                <option data-select="qrSetting">QR-код</option>
-                <option data-select="userSubscription">Ваша подписка</option>
-                <option data-select="userSite">Мой сайт</option>
+                <option id="selectCodeLink" data-select="selectCode" selected>Выбор QR-кода</option>
+                <option id="userProfileLink" data-select="userProfile">Мои данные</option>
+                <option id="qrSettingLink" data-select="qrSetting">QR-код</option>
+                <option id="userSubscriptionLink" data-select="userSubscription">Ваша подписка</option>
+                <option id="userSiteLink" data-select="userSite">Мой сайт</option>
               </select>
               <div class="d-none d-md-flex flex-column">
                 <button class="pc-nav-item active" type="button" data-select="selectCode">Выбор QR-кода</button>
@@ -99,119 +99,74 @@
                 </form>
               </div>
               <div class="controls-item" id="qrSetting">
+                {{ add_error }}
                 <p class="subscribe-status mb-1">Ваша подписка:<span class="ml-4"> Бесплатная</span></p>
-                <p class="subscribe-status-caption mb-3 mb-md-5">Доступно только 3 QR-кода</p>
-                <p class="qr-number">QR1</p>
-                <div class="card mb-3">
-                  <div class="row no-gutters">
-                    <div class="col-md-5 mb-3 max-w-400">
-                      <img class="mb-4" src="{% static 'img/qr_big.jpg' %}" alt="...">
-                      <button class="btn download-qr p-0">Скачать QR-код</button>
-                    </div>
-                    <div class="col-md-7 mb-3  max-w-400">
-                      <div class="card-body pl-md-4 p-0">
-                          <div class="row">
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://web.telegram.org/z/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
+                <p class="subscribe-status-caption mb-3 mb-md-5">Доступно только {{ subscription.qr_count }} QR-код{% if subscription.qr_count > 1 %}ов{% endif %}</p>
+                {% for qr in qr_codes %}
+                  <div class="qr_row">
+                    <p class="qr-number">QR{{ forloop.counter }}</p>
+                    <p id="qrPk" style="display: none;" > {{ qr.pk }} </p>
+                    <div class="card mb-3">
+                      <div class="row no-gutters">
+                        <div class="col-md-5 mb-3 max-w-400">
+                          <img class="mb-4" src="{% static 'img/qr_big.jpg' %}" alt="...">
+                          <button class="btn download-qr p-0">Скачать QR-код</button>
+                        </div>
+                        <div class="col-md-7 mb-3  max-w-400">
+                          <div class="card-body pl-md-4 p-0">
+                              <div class="row">
+                                    {% for link in qr.link_list.all %}
+                                      <div class="col-12 mb-3 mb-md-4">
+                                        <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
+                                          <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">
+                                          <p class="w-100 text-truncate m-0 ml-3">{{ link.link }}</p>
+                                          <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
+                                        </div>
+                                      </div>
+                                    {% endfor %}
+
+  <!--                              <div class="col-12 mb-3 mb-md-4">-->
+  <!--                                <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">-->
+  <!--                                  <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">-->
+  <!--                                  <p class="w-100 text-truncate m-0 ml-3">https://web.telegram.org/z/</p>-->
+  <!--                                  <button class="btn bi bi-x-circle pr-0 mr-n1"></button>-->
+  <!--                                </div>-->
+  <!--                              </div>-->
+  <!--                              <div class="col-12 mb-3 mb-md-4">-->
+  <!--                                <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center select">-->
+  <!--                                  <img class="ml-1" src="{% static 'img/inst_color_icon.svg' %}" alt="">-->
+  <!--                                  <p class="w-100 text-truncate m-0 ml-3">https://www.instagram.com/</p>-->
+  <!--                                  <button class="btn bi bi-x-circle pr-0 mr-n1"></button>-->
+  <!--                                </div>-->
+  <!--                              </div>-->
+  <!--                              <div class="col-12 mb-3 mb-md-4">-->
+  <!--                                <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">-->
+  <!--                                  <img class="ml-1" src="{% static 'img/earth_icon.svg' %}" alt="">-->
+  <!--                                  <p class="w-100 text-truncate m-0 ml-3">https://www.ссылка.com/</p>-->
+  <!--                                  <button class="btn bi bi-x-circle pr-0 mr-n1"></button>-->
+  <!--                                </div>-->
+  <!--                              </div>-->
                               </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center select">
-                                <img class="ml-1" src="{% static 'img/inst_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.instagram.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/earth_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.ссылка.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
+                              <button  type="button" class="addLinkButton btn btn-purple text-uppercase rounded-0 mb-4 w-100" data-toggle="modal" data-target="#addUrl">+ кнопка</button>
                           </div>
-                          <button type="button" class="btn btn-purple text-uppercase rounded-0 mb-4 w-100" data-toggle="modal" data-target="#addUrl">+ кнопка</button>
+                        </div>
                       </div>
                     </div>
+
                   </div>
-                </div>
-                <p class="qr-number">QR2</p>
+                {% endfor %}
                 <div class="card mb-3">
-                  <div class="row no-gutters">
-                    <div class="col-md-5 mb-3 max-w-400">
-                      <img class="mb-4" src="{% static 'img/qr_big.jpg' %}" alt="...">
-                      <button class="btn download-qr p-0">Скачать QR-код</button>
-                    </div>
-                    <div class="col-md-7 mb-3  max-w-400">
-                      <div class="card-body pl-md-4 p-0">
-                          <div class="row">
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://web.telegram.org/z/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center select">
-                                <img class="ml-1" src="{% static 'img/inst_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.instagram.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/earth_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.ссылка.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
+                      <div class="row no-gutters">
+                        <div class="col-md-5 mb-3 max-w-400">
+                          <a href="{% url 'add_qr' %}"><button type="button" class="btn btn-purple text-uppercase rounded-0 mb-4 w-100">+ QR код</button></a>
+                        </div>
+                        <div class="col-md-7 mb-3  max-w-400">
+                          <div class="card-body pl-md-4 p-0">
+
                           </div>
-                          <button type="button" class="btn btn-purple text-uppercase rounded-0 mb-4 w-100" data-toggle="modal" data-target="#addUrl">+ кнопка</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <p class="qr-number">QR3</p>
-                <div class="card mb-3">
-                  <div class="row no-gutters">
-                    <div class="col-md-5 mb-3 max-w-400">
-                      <img class="mb-4" src="{% static 'img/qr_big.jpg' %}" alt="...">
-                      <button class="btn download-qr p-0">Скачать QR-код</button>
-                    </div>
-                    <div class="col-md-7 mb-3  max-w-400">
-                      <div class="card-body pl-md-4 p-0">
-                          <div class="row">
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://web.telegram.org/z/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center select">
-                                <img class="ml-1" src="{% static 'img/inst_color_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.instagram.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                            <div class="col-12 mb-3 mb-md-4">
-                              <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                <img class="ml-1" src="{% static 'img/earth_icon.svg' %}" alt="">
-                                <p class="w-100 text-truncate m-0 ml-3">https://www.ссылка.com/</p>
-                                <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
-                              </div>
-                            </div>
-                          </div>
-                          <button type="button" class="btn btn-purple text-uppercase rounded-0 mb-4 w-100" data-toggle="modal" data-target="#addUrl">+ кнопка</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="controls-item" id="userSubscription">
                 <!--  <img class="like-hand d-none d-md-block" src="img/like_hand.png" alt="">  -->
@@ -224,21 +179,23 @@
                           <h5 class="card-title">{{ sub.name }}</h5>
                           <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
                           {% if sub.change_link %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                            {% if sub.change_link_count != 0 %}
+                              <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                            {% else %}
+                              <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>неограниченная смена QR-ссылки</p>
+                            {% endif %}
                           {% endif %}
-                          {% if sub.discount %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          {% if sub.change_link_count != 0 %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.support %} opacity-2 {% endif %}"></i>{{ sub.support_count }} обращений в<br>техподдержку в год</p>
+                          {% else %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.support %} opacity-2 {% endif %}"></i>Неограниченное кол-во обращений в<br>техподдержку в год</p>
                           {% endif %}
-                          {% if sub.lock_password %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
-                          {% endif %}
-                          {% if sub.personal_site %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
-                          {% endif %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
-                          {% if sub.support %}
-                            <p class="caption card-text d-flex align-items-center mt-4">{{ sub.support_count }} обращений в<br>техподдержку в год</p>
-                          {% endif %}
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
+
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.discount %}opacity-2 {% endif %}"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.lock_password %} opacity-2 {% endif %}"></i>пароль блокировки страницы</p>
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.personal_site %} opacity-2 {% endif %}"></i>личная страница пользователя<br>(внутренний сайт)</p>
+
                         </div>
                         <div class="card-footer text-center bg-transparent border-0 p-0">
                           <p>ваш план</p>
@@ -253,21 +210,23 @@
                           <h5 class="card-title">{{ sub.name }}</h5>
                           <p class="mb-3"><img src="{% static 'img/smal_qr_dark.svg' %}" alt=""></p>
                           {% if sub.change_link %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                            {% if sub.change_link_count != 0 %}
+                              <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность смены ссылки {{ sub.change_link_count }} раз(а) в год</p>
+                            {% else %}
+                              <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>неограниченная смена QR-ссылки</p>
+                            {% endif %}
                           {% endif %}
-                          {% if sub.discount %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          {% if sub.change_link_count != 0 %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.support %} opacity-2 {% endif %}"></i>{{ sub.support_count }} обращений в<br>техподдержку в год</p>
+                          {% else %}
+                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.support %} opacity-2 {% endif %}"></i>Неограниченное кол-во обращений в<br>техподдержку в год</p>
                           {% endif %}
-                          {% if sub.lock_password %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>пароль блокировки страницы</p>
-                          {% endif %}
-                          {% if sub.personal_site %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>личная страница пользователя<br>(внутренний сайт)</p>
-                          {% endif %}
-                            <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left opacity-2"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
-                          {% if sub.support %}
-                            <p class="caption card-text d-flex align-items-center mt-4">{{ sub.support_count }} обращений в<br>техподдержку в год</p>
-                          {% endif %}
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left"></i>возможность создавать {% if sub.qr_count > 1 %}до{% endif %} {{ sub.qr_count }} QR-код{% if sub.qr_count > 1 %}ов{% endif %}</p>
+
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.discount %}opacity-2 {% endif %}"></i>{{ sub.discount_count }}% скидки на все услуги партнеров</p>
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.lock_password %} opacity-2 {% endif %}"></i>пароль блокировки страницы</p>
+                          <p class="card-text d-flex align-items-center"><i class="bi bi-check-circle-fill mr-2 float-left {% if not sub.personal_site %} opacity-2 {% endif %}"></i>личная страница пользователя<br>(внутренний сайт)</p>
+
                         </div>
                         <div class="card-footer text-center bg-transparent border-0 p-0">
                           <button class="btn btn-purple text-uppercase rounded-0" type="button">купить план</button>
@@ -316,18 +275,20 @@
             </div>
             <div class="modal-body pt-0 px-md-4">
               <h5 class="modal-title mb-3 mb-md-4" id="exampleModalLongTitle">Добавление<br>ссылки</h5>
-                <form action="submit">
+                <form action="{% url 'add_user_link' %}" method="post">
+                  {% csrf_token %}
                   <div class="row">
                     <div class="col-12 mb-2 mb-md-4">
-                      <label for="inputUrl" class="text-uppercase">URL</label>
-                      <input type="text" id="inputUrl" class="form-control rounded-0" placeholder="http://example.com">
+                      <label for="{{ add_link_form.link.id_for_label }}" class="text-uppercase">URL</label>
+                      <input type="text" id="{{ add_link_form.link.id_for_label }}" name="{{ add_link_form.link.html_name }}" class="form-control rounded-0" placeholder="http://example.com">
+                      <input type="hidden" id="qrPk_input" name="qr_pk">
                     </div>
                     <div class="col-12 mb-2 mb-md-4">
-                      <label for="inputUrlName">+персонализировать текст кнопки</label>
-                      <input type="text" id="inputUrlName" class="form-control rounded-0" placeholder="текст кнопки">
+                      <label for="{{ add_link_form.button_text.id_for_label }}">+персонализировать текст кнопки</label>
+                      <input type="text" id="{{ add_link_form.button_text.id_for_label }}" name="{{ add_link_form.button_text.html_name }}" class="form-control rounded-0" placeholder="текст кнопки">
                     </div>
                   </div>
-                  <button type="button" class="btn btn-purple rounded-0 mb-4 w-100">ГОТОВО</button>
+                  <button type="submit" class="btn btn-purple rounded-0 mb-4 w-100">ГОТОВО</button>
                 </form>
             </div>
           </div>
@@ -341,5 +302,18 @@
         mask: '+7 (000) 000-00-00',
         lazy: true,
       });
+      {% url 'add_qr' as add_qr %}
+      $(document).ready(function(){
+          if('{{ add_qr }}' == '{{ request.path }}'){
+             $('#qrSettingLink').trigger('click');
+          }
+          $('.addLinkButton').on('click', function(){
+            console.log('clicked')
+            var pk = $(this).closest('.qr_row').find('#qrPk').text()
+            $('#qrPk_input').val(pk)
+          })
+      })
+
     </script>
+
 {% endblock body %}

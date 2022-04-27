@@ -5,6 +5,7 @@ from django.db import models
 
 
 class Subscription(models.Model):
+    # subscription model
     name = models.CharField(('Название подписки'), max_length=255)
     change_link = models.BooleanField(
         verbose_name=('Смена ссылки вкл/выкл'),
@@ -51,10 +52,15 @@ class Subscription(models.Model):
         default=1,
         blank=True
     )
+    link_count = models.PositiveIntegerField(
+        verbose_name='Количество доступных ссылок для QR (0 если не ограничено) ',
+        default=1,
+        blank=True
+    )
     present = models.BooleanField(
         verbose_name=("Подарок вкл/выкл"),
         default=False,
-        blank = True
+        blank=True
     )
     present_name = models.CharField(
         verbose_name=("Название подарка"),
@@ -77,6 +83,7 @@ class Subscription(models.Model):
 
 
 class User(AbstractUser):
+    # user model
     username_validator = UnicodeUsernameValidator
     surname = models.CharField(('Отчество'), max_length=100, null=True, blank=True)
     phone = models.CharField(('Номер телефона'), max_length=16, null=True, blank=True)
@@ -107,3 +114,69 @@ class User(AbstractUser):
     email_verify = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+
+class UserLinks(models.Model):
+    # qr link model
+    link = models.CharField(
+        verbose_name='Ссылка',
+        max_length=255,
+        blank=True
+    )
+    button_text = models.CharField(
+        verbose_name='Текст кнопки',
+        max_length=255,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = ('Ссылка пользователя')
+        verbose_name_plural = ("Ссылки пользователей")
+
+    def __str__(self):
+        return self.link
+
+
+class QrCode(models.Model):
+    # qr code model
+    qr_link = models.CharField(
+        verbose_name='Ссылка qr кода',
+        max_length=255,
+        unique=True,
+        blank=True
+    )
+    user = models.ForeignKey(
+        User,
+        blank=True,
+        on_delete=models.CASCADE
+
+    )
+    link_list = models.ManyToManyField(
+        UserLinks,
+        verbose_name='Список подключенных ссылок',
+        blank=True,
+        related_name='link_list',
+        null=True
+    )
+    link_active = models.OneToOneField(
+        UserLinks,
+        verbose_name='Активная ссылка',
+        on_delete=models.CASCADE,
+        blank=True,
+        related_name='link_active',
+        null=True
+    )
+
+    enabled = models.BooleanField(
+        verbose_name='Активность qr кода',
+        default=True,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = ('QR код')
+        verbose_name_plural = ("QR коды")
+
+    def __str__(self):
+        return f'{self.user.email}: {self.qr_link}'

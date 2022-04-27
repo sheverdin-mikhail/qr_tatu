@@ -3,15 +3,17 @@ from django.contrib.auth import authenticate, login, views, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.conf import settings
+from random import choice
 
-from .forms import RegisterForm, LoginForm, PersonalInfoForm
+from .forms import RegisterForm, LoginForm, PersonalInfoForm, AddLinkForm
 from .utils import send_email_for_verify
-from .models import User, Subscription
+from .models import User, Subscription, QrCode, UserLinks
 
 User = get_user_model()
 
@@ -46,12 +48,26 @@ class PersonalCabinet(View):
         if not request.user.is_authenticated:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        user = User.objects.get(pk=request.user.pk)
-        form = PersonalInfoForm(instance=user)
         subs = Subscription.objects.all().order_by('id')
+        user = request.user
+        subscription = Subscription.objects.get(pk=user.subscription.pk)
+        # qr_codes = QrCode.objects.all()
+        qr_codes = (
+            QrCode.objects
+            .select_related('link_active')
+            .filter(user=user)
+            .prefetch_related('link_list')
+        )
+        form = PersonalInfoForm(instance=user)
+        add_link_form = AddLinkForm
+
         context = {
+            'user': user,
             'form': form,
+            'qr_codes': qr_codes,
+            'subscription': subscription,
             'subs': subs,
+            'add_link_form': add_link_form
         }
 
         return render(request, 'personal/lk.html', context)
@@ -89,3 +105,73 @@ class ChangeInfo(View):
             info.phone = form.cleaned_data.get('phone')
             info.save()
         return redirect('personal')
+
+
+class AddQr(View):
+    def get(self, request):
+        user = request.user
+        subscription = Subscription.objects.get(pk=user.subscription.pk)
+        qr_codes = QrCode.objects.filter(user=user).prefetch_related('link_list', 'link_active')
+        if qr_codes.count() < subscription.qr_count or subscription.qr_count == 0:
+            template = 'abcdefghijklmnopqrstuvwxyz0123456789'
+            while True:
+                qr_link = ''.join(choice(template) for i in range(7))
+                qr_exists = QrCode.objects.filter(qr_link=qr_link).exists()
+                if not qr_exists:
+                    qr_code = QrCode(
+                        qr_link=qr_link,
+                        user=user
+                    )
+                    qr_code.save()
+                    return redirect('personal')
+
+        user = User.objects.get(pk=request.user.pk)
+        form = PersonalInfoForm(instance=user)
+        subs = Subscription.objects.all().order_by('id')
+        add_error = f'Превышен лимит QR кодов вашей подписки. Максимальное количество кодов {subscription.qr_count}'
+        context = {
+            'user': user,
+            'form': form,
+            'qr_codes': qr_codes,
+            'subs': subs,
+            'add_error': add_error,
+            'subscription': subscription,
+        }
+        return render(request, 'personal/lk.html', context)
+
+
+class AddUserLink(View):
+    def post(self, request):
+
+        user = request.user
+        subscription = Subscription.objects.get(pk=user.subscription.pk)
+        qr_codes = QrCode.objects.filter(user=user).prefetch_related('link_list', 'link_active')
+        form = PersonalInfoForm(instance=user)
+        subs = Subscription.objects.all().order_by('id')
+        add_error = f'Превышен лимит QR кодов вашей подписки. Максимальное количество кодов {subscription.qr_count}'
+        print(request.POST['qr_pk'])
+        qr = QrCode.objects.get(pk=request.POST['qr_pk'])
+
+
+        add_link_form = AddLinkForm(data=request.POST or None)
+        if add_link_form.is_valid():
+            if subscription.link_count > qr.link_list.count() or subscription.link_count == 0:
+                user_link = UserLinks(
+                    link=add_link_form.cleaned_data['link'],
+                    button_text=add_link_form.cleaned_data['button_text']
+                )
+                user_link.save()
+                qr.link_list.add(user_link)
+                qr.save()
+            return redirect('personal')
+
+        context = {
+            'user': user,
+            'form': form,
+            'qr_codes': qr_codes,
+            'subs': subs,
+            'add_error': add_error,
+            'subscription': subscription,
+        }
+
+        return render(request, 'lk.html', context)

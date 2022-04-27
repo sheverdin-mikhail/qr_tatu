@@ -19,4 +19,7 @@ urlpatterns = [
          name='personal'
          ),
     path('change_info/', views.ChangeInfo.as_view(), name='change_info'),
+    path('add_qr/', views.AddQr.as_view(), name='add_qr'),
+    path('add_user_link/', views.AddUserLink.as_view(), name='add_user_link'),
+
 ]

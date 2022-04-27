@@ -6,7 +6,7 @@ from django.contrib.auth.forms import (
 from django.core.exceptions import ValidationError
 from django import forms
 
-from .models import User
+from .models import User, UserLinks
 from .utils import send_email_for_verify
 
 
@@ -46,3 +46,9 @@ class PersonalInfoForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['phone', 'surname', 'first_name', 'last_name']
+
+
+class AddLinkForm(forms.ModelForm):
+    class Meta:
+        model = UserLinks
+        fields = ('link', 'button_text')
