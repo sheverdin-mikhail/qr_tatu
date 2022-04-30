@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth import authenticate, login, views, get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -54,9 +56,9 @@ class PersonalCabinet(View):
         # qr_codes = QrCode.objects.all()
         qr_codes = (
             QrCode.objects
-            .select_related('link_active')
-            .filter(user=user)
-            .prefetch_related('link_list')
+                .select_related('link_active')
+                .filter(user=user)
+                .prefetch_related('link_list')
         )
         form = PersonalInfoForm(instance=user)
         add_link_form = AddLinkForm
@@ -148,22 +150,20 @@ class AddUserLink(View):
         qr_codes = QrCode.objects.filter(user=user).prefetch_related('link_list', 'link_active')
         form = PersonalInfoForm(instance=user)
         subs = Subscription.objects.all().order_by('id')
-        add_error = f'Превышен лимит QR кодов вашей подписки. Максимальное количество кодов {subscription.qr_count}'
-        print(request.POST['qr_pk'])
+        add_error = f'Превышен лимит доступных ссылок.'
         qr = QrCode.objects.get(pk=request.POST['qr_pk'])
-
 
         add_link_form = AddLinkForm(data=request.POST or None)
         if add_link_form.is_valid():
             if subscription.link_count > qr.link_list.count() or subscription.link_count == 0:
                 user_link = UserLinks(
                     link=add_link_form.cleaned_data['link'],
-                    button_text=add_link_form.cleaned_data['button_text']
+                    button_text=add_link_form.cleaned_data['button_text'],
                 )
                 user_link.save()
                 qr.link_list.add(user_link)
                 qr.save()
-            return redirect('personal')
+                return redirect('personal')
 
         context = {
             'user': user,
@@ -174,4 +174,13 @@ class AddUserLink(View):
             'subscription': subscription,
         }
 
-        return render(request, 'lk.html', context)
+        return render(request, 'personal/lk.html', context)
+
+
+class QrRedirect(View):
+
+    def get(self, request, *args, **kwargs):
+        qr_link = kwargs['slug']
+        qr_code = QrCode.objects.get(qr_link=qr_link)
+
+        return redirect(qr_code.link_active)

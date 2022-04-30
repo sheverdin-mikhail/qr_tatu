@@ -1,7 +1,10 @@
+import re
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core import validators
 from django.db import models
+from django.urls import reverse
 
 
 class Subscription(models.Model):
@@ -128,6 +131,12 @@ class UserLinks(models.Model):
         max_length=255,
         blank=True
     )
+    link_icon = models.CharField(
+        verbose_name='Иконка кнопки',
+        max_length=255,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = ('Ссылка пользователя')
@@ -135,6 +144,20 @@ class UserLinks(models.Model):
 
     def __str__(self):
         return self.link
+
+    def save(self):
+        url = self.link
+        if re.search(r't.me.', url):
+            self.link_icon = 'telegram'
+        elif re.search(r'instagram.', url):
+            self.link_icon = 'instagram'
+        elif re.search(r"vk.ru.", url):
+            self.link_icon = 'vk'
+        elif re.search(r"facebook.com.", url):
+            self.link_icon = 'facebook'
+        else:
+            self.link_icon = 'other'
+        return super().save()
 
 
 class QrCode(models.Model):
@@ -180,3 +203,6 @@ class QrCode(models.Model):
 
     def __str__(self):
         return f'{self.user.email}: {self.qr_link}'
+
+    def get_absolute_url(self):
+        return reverse('qr_redirect', kwargs={'slug': self.qr_link})

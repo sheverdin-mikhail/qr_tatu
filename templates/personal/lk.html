@@ -1,5 +1,5 @@
 ﻿{% extends 'base.html' %}
-{% load static %}
+{% load static qr_code %}
 
 
 {% block body %}
@@ -48,8 +48,6 @@
                     <button class="btn btn-light-blue rounded-0 select" type="button"><span class="gos-color"></span>Госуслуги</button>
                     <button class="btn btn-light-blue rounded-0" type="button"><span class="tg-color"></span>Telegram</button>
                     <button class="btn btn-light-blue rounded-0" type="button"><span class="inst-color"></span>Instagram</button>
-                    <button class="btn btn-light-blue rounded-0" type="button">Ссылка</button>
-                    <button class="btn btn-light-blue rounded-0" type="button">Ссылка</button>
                   </div>
                 </div>
               </div>
@@ -109,7 +107,7 @@
                     <div class="card mb-3">
                       <div class="row no-gutters">
                         <div class="col-md-5 mb-3 max-w-400">
-                          <img class="mb-4" src="{% static 'img/qr_big.jpg' %}" alt="...">
+                          <img class="mb-4" src="{% qr_url_from_text qr.get_absolute_url%}" alt="...">
                           <button class="btn download-qr p-0">Скачать QR-код</button>
                         </div>
                         <div class="col-md-7 mb-3  max-w-400">
@@ -118,7 +116,19 @@
                                     {% for link in qr.link_list.all %}
                                       <div class="col-12 mb-3 mb-md-4">
                                         <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                          <img class="ml-1" src="{% static 'img/tg_color_icon.svg' %}" alt="">
+                                          <img class="ml-1" src="
+                                          {% if link.link_icon == 'telegram' %}
+                                            {% static 'img/tg_color_icon.svg' %}
+                                          {% elif link.link_icon == 'instagram' %}
+                                            {% static 'img/inst_color_icon.svg' %}
+                                          {% elif link.link_icon == 'vk' %}
+                                            {% static 'img/tg_color_icon.svg' %}
+                                          {% elif link.link_icon == 'facebook' %}
+                                            {% static 'img/tg_color_icon.svg' %}
+                                          {% elif link.link_icon == 'other' %}
+                                            {% static 'img/earth_icon.svg' %}
+                                          {% endif %}
+                                          " alt="">
                                           <p class="w-100 text-truncate m-0 ml-3">{{ link.link }}</p>
                                           <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
                                         </div>

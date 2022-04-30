@@ -84,3 +84,4 @@ class FaqView(View):
             'form': login_form
         }
         return render(request, 'main/faq.html', context)
+
