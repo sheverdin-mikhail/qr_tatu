@@ -2,16 +2,15 @@ import re
 
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth import authenticate, login, views, get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ValidationError
-from django.db.models import Prefetch
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.conf import settings
 from random import choice
+from qr_code.views import serve_qr_code_image
 
 from .forms import RegisterForm, LoginForm, PersonalInfoForm, AddLinkForm
 from .utils import send_email_for_verify
@@ -182,5 +181,41 @@ class QrRedirect(View):
     def get(self, request, *args, **kwargs):
         qr_link = kwargs['slug']
         qr_code = QrCode.objects.get(qr_link=qr_link)
+        if qr_code.link_active:
+            link= qr_code.link_active.link
+            return redirect(link)
+        else:
+            return HttpResponseNotFound('<h1>Page not found</h1>')
 
-        return redirect(qr_code.link_active)
+
+class SetLink(View):
+
+    def get(self, request, *args, **kwargs):
+        qr = QrCode.objects.get(qr_link=kwargs['qr_link'])
+        link = UserLinks.objects.get(pk=kwargs['link'])
+        qr.link_active = link
+        qr.save()
+        return redirect('personal')
+
+
+class DeleteLink(View):
+
+    def get(self, request, *args, **kwargs):
+        link = UserLinks.objects.get(pk=kwargs['link'])
+        try:
+            qr_active = QrCode.objects.get(link_active__pk=link.pk)
+            qr_active.link_active = None
+            qr_active.save()
+            link.delete()
+        except ObjectDoesNotExist:
+            link.delete()
+
+        return redirect('personal')
+
+
+class DownloadQr(View):
+
+    def get(self, request):
+        response = serve_qr_code_image(request)
+        response['Content-Disposition'] = "attachment; filename=qr.svg"
+        return response

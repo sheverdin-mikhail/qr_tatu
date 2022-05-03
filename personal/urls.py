@@ -22,5 +22,8 @@ urlpatterns = [
     path('add_qr/', views.AddQr.as_view(), name='add_qr'),
     path('add_user_link/', views.AddUserLink.as_view(), name='add_user_link'),
     path('qr_redirect/<slug:slug>/', views.QrRedirect.as_view(), name='qr_redirect'),
+    path('set_link/<slug:qr_link>/<slug:link>', views.SetLink.as_view(), name='set_link'),
+    path('delete_link/<slug:link>', views.DeleteLink.as_view(), name='delete_link'),
+    path('download_qr/', views.DownloadQr.as_view(), name='download_qr'),
 
 ]

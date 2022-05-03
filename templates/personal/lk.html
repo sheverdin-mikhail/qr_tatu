@@ -40,15 +40,31 @@
                 <p class="h2">Выбор QR-кода</p>
                 <div class="row">
                   <div class="col-6 col-md-5 d-flex flex-column">
-                    <button class="btn btn-light rounded-0 select" type="button"><span>QR1</span>Госуслуги</button>
-                    <button class="btn btn-light rounded-0" type="button"><span>QR2</span></button>
-                    <button class="btn btn-light rounded-0" type="button"><span>QR3</span></button>
+                    {% for qr in qr_codes %}
+                      <button class="choose_button btn btn-light rounded-0 {% if forloop.counter == 1 %}select{% endif %}" data-filter="{{ qr.qr_link }}" type="button"><span style="margin: 0 15px 0 0;">QR{{ forloop.counter }}</span>{{ qr.link_active.button_text }}</button>
+                    {% endfor %}
                   </div>
-                  <div class="col-6 col-md-5 d-flex flex-column">
-                    <button class="btn btn-light-blue rounded-0 select" type="button"><span class="gos-color"></span>Госуслуги</button>
-                    <button class="btn btn-light-blue rounded-0" type="button"><span class="tg-color"></span>Telegram</button>
-                    <button class="btn btn-light-blue rounded-0" type="button"><span class="inst-color"></span>Instagram</button>
-                  </div>
+                  {% for qr in qr_codes %}
+                    <div class="col-6 col-md-5 d-flex flex-column" data-cat="{{ qr.qr_link }}" {% if forloop.counter != 1 %} style="display: none !important; " {% endif %}>
+                      {% for link in qr.link_list.all %}
+                        <a style="padding: 1.125rem 1.625rem;" class="btn btn-light-blue rounded-0 {% if link == qr.link_active %} select {% endif %}" href="{% url 'set_link' qr.qr_link link.pk  %}"><span class="
+                         {% if link.link_icon == 'telegram' %}
+                          tg-color
+                        {% elif link.link_icon == 'instagram' %}
+                          inst-color
+                        {% elif link.link_icon == 'gosuslugi' %}
+                          gos-color
+                        {% elif link.link_icon == 'vk' %}
+                          vk-color
+                        {% elif link.link_icon == 'facebook' %}
+                          facebook-color
+                        {% elif link.link_icon == 'other' %}
+                          other-color
+                        {% endif %}
+                        "></span>{{ link.button_text }}</a>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
                 </div>
               </div>
               <div class="controls-item" id="userProfile">
@@ -107,8 +123,8 @@
                     <div class="card mb-3">
                       <div class="row no-gutters">
                         <div class="col-md-5 mb-3 max-w-400">
-                          <img class="mb-4" src="{% qr_url_from_text qr.get_absolute_url%}" alt="...">
-                          <button class="btn download-qr p-0">Скачать QR-код</button>
+                          <img id="img-{{ qr.qr_link }}" class="mb-4" src="{% qr_url_from_text qr.get_full_absolute_url %}" alt="...">
+                          <a class="btn download-qr p-0" onclick="DownloadQr('#img-{{ qr.qr_link }}')">Скачать QR-код</a>
                         </div>
                         <div class="col-md-7 mb-3  max-w-400">
                           <div class="card-body pl-md-4 p-0">
@@ -130,7 +146,7 @@
                                           {% endif %}
                                           " alt="">
                                           <p class="w-100 text-truncate m-0 ml-3">{{ link.link }}</p>
-                                          <button class="btn bi bi-x-circle pr-0 mr-n1"></button>
+                                          <a href="{% url 'delete_link' link.pk %}" class="btn bi bi-x-circle pr-0 mr-n1"></a>
                                         </div>
                                       </div>
                                     {% endfor %}

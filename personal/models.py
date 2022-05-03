@@ -2,6 +2,8 @@ import re
 
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.core import validators
 from django.db import models
 from django.urls import reverse
@@ -155,6 +157,8 @@ class UserLinks(models.Model):
             self.link_icon = 'vk'
         elif re.search(r"facebook.com.", url):
             self.link_icon = 'facebook'
+        elif re.search(r"gosuslugi.ru.", url):
+            self.link_icon = 'gosuslugi'
         else:
             self.link_icon = 'other'
         return super().save()
@@ -206,3 +210,8 @@ class QrCode(models.Model):
 
     def get_absolute_url(self):
         return reverse('qr_redirect', kwargs={'slug': self.qr_link})
+
+
+    def get_full_absolute_url(self):
+        domain = Site.objects.get_current().domain
+        return 'http://%s%s' % (domain, self.get_absolute_url())

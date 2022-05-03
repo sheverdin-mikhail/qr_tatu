@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'debug_toolbar',
     'qr_code',
 
@@ -112,7 +113,7 @@ LOGIN_REDIRECT_URL = '/lk'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
 
-
+SITE_ID = 1
 
 try:
     from .local_settings import *
