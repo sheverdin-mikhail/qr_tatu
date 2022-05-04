@@ -6,3 +6,4 @@ venv
 .DS_Store
 local_settings.py
 prod_settings.py
+settings2.py
