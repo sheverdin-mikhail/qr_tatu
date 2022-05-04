@@ -217,5 +217,5 @@ class DownloadQr(View):
 
     def get(self, request):
         response = serve_qr_code_image(request)
-        response['Content-Disposition'] = "attachment; filename=qr.svg"
+        response['Content-Disposition'] = "attachment; filename=qr.png"
         return response

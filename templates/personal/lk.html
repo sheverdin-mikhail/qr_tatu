@@ -47,7 +47,7 @@
                   {% for qr in qr_codes %}
                     <div class="col-6 col-md-5 d-flex flex-column" data-cat="{{ qr.qr_link }}" {% if forloop.counter != 1 %} style="display: none !important; " {% endif %}>
                       {% for link in qr.link_list.all %}
-                        <a style="padding: 1.125rem 1.625rem;" class="btn btn-light-blue rounded-0 {% if link == qr.link_active %} select {% endif %}" href="{% url 'set_link' qr.qr_link link.pk  %}"><span class="
+                        <button  class="btn btn-light-blue rounded-0 {% if link == qr.link_active %} select {% endif %}" onclick="SetLink('{{ qr.qr_link }}','{{ link.pk }}')"><span class="
                          {% if link.link_icon == 'telegram' %}
                           tg-color
                         {% elif link.link_icon == 'instagram' %}
@@ -61,7 +61,7 @@
                         {% elif link.link_icon == 'other' %}
                           other-color
                         {% endif %}
-                        "></span>{{ link.button_text }}</a>
+                        "></span>{{ link.button_text }}</button>
                       {% endfor %}
                     </div>
                   {% endfor %}
@@ -123,7 +123,7 @@
                     <div class="card mb-3">
                       <div class="row no-gutters">
                         <div class="col-md-5 mb-3 max-w-400">
-                          <img id="img-{{ qr.qr_link }}" class="mb-4" src="{% qr_url_from_text qr.get_full_absolute_url %}" alt="...">
+                          <img id="img-{{ qr.qr_link }}" class="mb-4" src="{% qr_url_from_text qr.get_full_absolute_url image_format='png' %}" alt="...">
                           <a class="btn download-qr p-0" onclick="DownloadQr('#img-{{ qr.qr_link }}')">Скачать QR-код</a>
                         </div>
                         <div class="col-md-7 mb-3  max-w-400">
@@ -146,7 +146,7 @@
                                           {% endif %}
                                           " alt="">
                                           <p class="w-100 text-truncate m-0 ml-3">{{ link.link }}</p>
-                                          <a href="{% url 'delete_link' link.pk %}" class="btn bi bi-x-circle pr-0 mr-n1"></a>
+                                          <button onclick="DeleteLink({{ link.pk }})" class="btn bi bi-x-circle pr-0 mr-n1"></button>
                                         </div>
                                       </div>
                                     {% endfor %}
