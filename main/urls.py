@@ -8,4 +8,5 @@ urlpatterns = [
     path('for_using/', views.ForUsingView.as_view(), name='for_using'),
     path('subscription/', views.SubscriptionView.as_view(), name='subscription'),
     path('faq/', views.FaqView.as_view(), name='faq'),
+
 ]

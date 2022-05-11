@@ -1336,15 +1336,18 @@ footer .btn-outline-dark:hover {
     margin-right: 3rem;
 }
 #selectCode .gos-color {
-    background-image: url(../img/gos_uslugi_icon.svg);
+    background-image: url(../icons/gos.svg);
 }
 #selectCode .tg-color {
-    background-image: url(../img/tg_color_icon.svg);
+    background-image: url(../icons/tg.svg);
 }
 #selectCode .inst-color {
-    background-image: url(../img/inst_color_icon.svg);
+    background-image: url(../icons/inst.svg);
 }
-#selectCode .gos-color, #selectCode .tg-color, #selectCode .inst-color {
+#selectCode .ok-color {
+    background-image: url(../icons/ok.svg);
+}
+#selectCode .icon {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;

@@ -1,12 +1,14 @@
+import calendar
 import re
+from datetime import datetime, timedelta
 
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
-from django.contrib.sites.shortcuts import get_current_site
-from django.core import validators
 from django.db import models
 from django.urls import reverse
+
+from .utils import get_icon_temlate
 
 
 class Subscription(models.Model):
@@ -90,6 +92,9 @@ class Subscription(models.Model):
 class User(AbstractUser):
     # user model
     username_validator = UnicodeUsernameValidator
+    sub_date = models.DateField(verbose_name='Дата подписки', null=True, blank=True)
+    sub_end_date = models.DateField(verbose_name='Дата окончания подписки', null=True, blank=True)
+    sub_month = models.PositiveIntegerField(verbose_name="Количество купленных месяцев", default=1)
     surname = models.CharField(('Отчество'), max_length=100, null=True, blank=True)
     phone = models.CharField(('Номер телефона'), max_length=16, null=True, blank=True)
     username = models.CharField(
@@ -120,6 +125,14 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    def save_sub(self, sub_id):
+        sub = Subscription.objects.get(pk=sub_id)
+        self.subscription = sub
+        self.sub_date = datetime.now()
+        days = calendar.monthrange(self.sub_date.year, self.sub_date.month)[1]
+        self.sub_end_date = self.sub_date + timedelta(days=days * self.sub_month)
+        return super().save()
+
 
 class UserLinks(models.Model):
     # qr link model
@@ -149,18 +162,7 @@ class UserLinks(models.Model):
 
     def save(self):
         url = self.link
-        if re.search(r't.me.', url):
-            self.link_icon = 'telegram'
-        elif re.search(r'instagram.', url):
-            self.link_icon = 'instagram'
-        elif re.search(r"vk.ru.", url):
-            self.link_icon = 'vk'
-        elif re.search(r"facebook.com.", url):
-            self.link_icon = 'facebook'
-        elif re.search(r"gosuslugi.ru.", url):
-            self.link_icon = 'gosuslugi'
-        else:
-            self.link_icon = 'other'
+        self.link_icon = get_icon_temlate(url)
         return super().save()
 
 
@@ -210,7 +212,6 @@ class QrCode(models.Model):
 
     def get_absolute_url(self):
         return reverse('qr_redirect', kwargs={'slug': self.qr_link})
-
 
     def get_full_absolute_url(self):
         domain = Site.objects.get_current().domain

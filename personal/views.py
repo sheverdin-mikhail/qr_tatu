@@ -182,7 +182,7 @@ class QrRedirect(View):
         qr_link = kwargs['slug']
         qr_code = QrCode.objects.get(qr_link=qr_link)
         if qr_code.link_active:
-            link= qr_code.link_active.link
+            link = qr_code.link_active.link
             return redirect(link)
         else:
             return HttpResponseNotFound('<h1>Page not found</h1>')
@@ -219,3 +219,12 @@ class DownloadQr(View):
         response = serve_qr_code_image(request)
         response['Content-Disposition'] = "attachment; filename=qr.png"
         return response
+
+
+class ChangeSub(View):
+
+    def get(self, request, *args, **kwargs):
+
+        user = User.objects.get(pk=request.user.pk)
+        user.save_sub(kwargs['sub_id'])
+        return redirect('personal')

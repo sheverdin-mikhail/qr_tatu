@@ -25,5 +25,6 @@ urlpatterns = [
     path('set_link/<slug:qr_link>/<slug:link>', views.SetLink.as_view(), name='set_link'),
     path('delete_link/<slug:link>', views.DeleteLink.as_view(), name='delete_link'),
     path('download_qr/', views.DownloadQr.as_view(), name='download_qr'),
+    path('change_sub/<int:sub_id>/', views.ChangeSub.as_view(), name='change_sub'),
 
 ]

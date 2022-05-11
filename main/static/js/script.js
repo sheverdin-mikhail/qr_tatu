@@ -78,3 +78,7 @@ function SetLink(qr_code, link_pk){
 function DeleteLink(link_pk){
     window.location.replace('/delete_link/'+link_pk)
 }
+
+function BySub(sub_id, user_pk){
+    window.location.replace('/change_sub/'+sub_id)
+}

@@ -47,21 +47,8 @@
                   {% for qr in qr_codes %}
                     <div class="col-6 col-md-5 d-flex flex-column" data-cat="{{ qr.qr_link }}" {% if forloop.counter != 1 %} style="display: none !important; " {% endif %}>
                       {% for link in qr.link_list.all %}
-                        <button  class="btn btn-light-blue rounded-0 {% if link == qr.link_active %} select {% endif %}" onclick="SetLink('{{ qr.qr_link }}','{{ link.pk }}')"><span class="
-                         {% if link.link_icon == 'telegram' %}
-                          tg-color
-                        {% elif link.link_icon == 'instagram' %}
-                          inst-color
-                        {% elif link.link_icon == 'gosuslugi' %}
-                          gos-color
-                        {% elif link.link_icon == 'vk' %}
-                          vk-color
-                        {% elif link.link_icon == 'facebook' %}
-                          facebook-color
-                        {% elif link.link_icon == 'other' %}
-                          other-color
-                        {% endif %}
-                        "></span>{{ link.button_text }}</button>
+                        <button  class="btn btn-light-blue rounded-0 {% if link == qr.link_active %} select {% endif %}" onclick="SetLink('{{ qr.qr_link }}','{{ link.pk }}')">
+                          <span class="icon"  style="background-image: url({% static 'icons/' %}{{ link.link_icon }}.svg);"  ></span>{{ link.button_text }}</button>
                       {% endfor %}
                     </div>
                   {% endfor %}
@@ -132,19 +119,7 @@
                                     {% for link in qr.link_list.all %}
                                       <div class="col-12 mb-3 mb-md-4">
                                         <div class="form-control rounded-0 mb-2 w-100 d-flex align-items-center">
-                                          <img class="ml-1" src="
-                                          {% if link.link_icon == 'telegram' %}
-                                            {% static 'img/tg_color_icon.svg' %}
-                                          {% elif link.link_icon == 'instagram' %}
-                                            {% static 'img/inst_color_icon.svg' %}
-                                          {% elif link.link_icon == 'vk' %}
-                                            {% static 'img/tg_color_icon.svg' %}
-                                          {% elif link.link_icon == 'facebook' %}
-                                            {% static 'img/tg_color_icon.svg' %}
-                                          {% elif link.link_icon == 'other' %}
-                                            {% static 'img/earth_icon.svg' %}
-                                          {% endif %}
-                                          " alt="">
+                                          <img class="ml-1" src="{% static 'icons/' %}{{ link.link_icon }}.svg" alt="">
                                           <p class="w-100 text-truncate m-0 ml-3">{{ link.link }}</p>
                                           <button onclick="DeleteLink({{ link.pk }})" class="btn bi bi-x-circle pr-0 mr-n1"></button>
                                         </div>
@@ -196,7 +171,7 @@
               </div>
               <div class="controls-item" id="userSubscription">
                 <!--  <img class="like-hand d-none d-md-block" src="img/like_hand.png" alt="">  -->
-                <p class="subscribe-status mb-4 mb-md-5">Ваша подписка:<span class="ml-4"> Бесплатная</span></p>
+                <p class="subscribe-status mb-4 mb-md-5">Ваша подписка:<span class="ml-4"> {{ user.subscription.name }}</span></p>
                 <div class="card-group d-flex flex-wrap ">
                   {% for sub in subs %}
                     {% if user.subscription == sub %}
@@ -255,7 +230,7 @@
 
                         </div>
                         <div class="card-footer text-center bg-transparent border-0 p-0">
-                          <button class="btn btn-purple text-uppercase rounded-0" type="button">купить план</button>
+                          <button class="btn btn-purple text-uppercase rounded-0" onclick="BySub({{ sub.pk }})" type="button">купить план</button>
                         </div>
                       </div>
                     {% endif %}
