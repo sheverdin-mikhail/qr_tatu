@@ -2,30 +2,37 @@
 <mjml>
    <mj-head>
       <mj-title></mj-title>
-      <mj-attributes>
-         
-      </mj-attributes>
+      <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" />
       <mj-style>
-         .header h1{
+         .header-text h1{
             font-weight: 800;
             font-size: 22px;
             line-height: 27px;
             color: #874FCE !important;
+            font-family: 'Montserrat';
          }
          .header-text p{
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
             line-height: 20px;
-
+            font-family: 'Montserrat';
             color: #000000;
+         }
+
+         .bottom-text {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 17px;
+            color: #000000;
+            font-family: 'Montserrat';
          }
       </mj-style>
    </mj-head>
    <mj-body>
       <mj-section>
          <mj-column width="710px" background-color="#ffffff">
-            <mj-text css-class='headertext'>
+            <mj-text css-class='header-text'>
                <h1 >
                   Подтвердите e-mail
                </h1>
@@ -34,7 +41,7 @@
                </p>
             </mj-text>
             <mj-image src="http://127.0.0.1:8000/static/img/email_img.png" alt="image" width="458px" align="left"/>
-            <mj-button border-radius='0' background-color="#874FCE" align='left' font-size="14px" padding="20px 30px" href="#">
+            <mj-button border-radius='0' font-family='Montserrat' background-color="#874FCE" align='left' font-size="14px" padding="20px 30px" href="#">
                Подтвердить E-mail
             </mj-button>
             <mj-text css-class='bottom-text' color="#000000">
