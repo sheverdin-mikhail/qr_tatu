@@ -26,7 +26,7 @@ def send_email_for_verify(request, user, use_https=False):
         'personal/verify_email.html',
         context=context
     )
-    send_mail('Verify email', settings.EMAIL_BACKEND, user.email, fail_silently=True, html_message=message)
+    send_mail('Verify email', settings.EMAIL_BACKEND, [user.email], fail_silently=True, html_message=message)
     # email = MIMEText(message, 'html')
     # email['to'] = user.email
     # email['from'] = settings.EMAIL_BACKEND
