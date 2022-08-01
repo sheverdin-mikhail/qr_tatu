@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string, get_template
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -26,17 +26,18 @@ def send_email_for_verify(request, user, use_https=False):
         'personal/verify_email.html',
         context=context
     )
-    email = MIMEText(message, 'html')
-    email['to'] = user.email
-    email['from'] = settings.EMAIL_BACKEND
-    email['subject'] = 'Verify email'
+    send_mail('Verify email', settings.EMAIL_BACKEND, user.email, fail_silently=True, html_message=message)
+    # email = MIMEText(message, 'html')
+    # email['to'] = user.email
+    # email['from'] = settings.EMAIL_BACKEND
+    # email['subject'] = 'Verify email'
     # email = EmailMessage(
     #     'Verify email',
     #     message,
     #     to=[user.email],
     # )
     # email.content_subtype = 'html'
-    email.send()
+    # email.send()
 
 
 def get_icon_temlate(url):
