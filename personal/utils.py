@@ -8,7 +8,7 @@ from django.template.loader import render_to_string, get_template
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from qr_tatu_project.qr_tatu.qr_tatu import settings
+from django.conf import settings
 
 
 def send_email_for_verify(request, user, use_https=False):
