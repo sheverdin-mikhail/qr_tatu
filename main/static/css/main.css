@@ -1575,3 +1575,31 @@ footer .btn-outline-dark:hover {
     line-height: 22px;
     color: #000000;
 }
+
+.verify{
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+}
+.verify__header{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 27px;
+    color: #874FCE;
+    margin-bottom: 14px;
+}
+.verify__text{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
+    margin-bottom: 50px;
+}
+.verify__img{
+    max-width: 453px;
+    margin-bottom: 50px;
+}

@@ -1,0 +1,48 @@
+
+<mjml>
+   <mj-head>
+      <mj-title></mj-title>
+      <mj-attributes>
+         
+      </mj-attributes>
+      <mj-style>
+         .header h1{
+            font-weight: 800;
+            font-size: 22px;
+            line-height: 27px;
+            color: #874FCE !important;
+         }
+         .header-text p{
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20px;
+
+            color: #000000;
+         }
+      </mj-style>
+   </mj-head>
+   <mj-body>
+      <mj-section>
+         <mj-column width="710px" background-color="#ffffff">
+            <mj-text css-class='headertext'>
+               <h1 >
+                  Подтвердите e-mail
+               </h1>
+               <p>
+                  Вы получили это письмо, так как Ваш адрес был указан на сайте<br> myqr.dev. Чтобы подтвердить Вашу почту и получать от нас<br> письма нажмите ниже: 
+               </p>
+            </mj-text>
+            <mj-image src="http://127.0.0.1:8000/static/img/email_img.png" alt="image" width="458px" align="left"/>
+            <mj-button border-radius='0' background-color="#874FCE" align='left' font-size="14px" padding="20px 30px" href="#">
+               Подтвердить E-mail
+            </mj-button>
+            <mj-text css-class='bottom-text' color="#000000">
+               <p >В случае, если вы получили это письмо по ошибке, просто <br> проигнорируйте его.</p>
+               <p>С уважением, <br>
+                  Служба поддержки myqr.dev</p>
+            </mj-text>
+         </mj-column>
+      </mj-section>
+   </mj-body>
+</mjml>
