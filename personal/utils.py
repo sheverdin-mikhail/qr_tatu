@@ -26,22 +26,22 @@ def send_email_for_verify(request, user, use_https=False):
         'personal/verify_email.html',
         context=context
     )
-    send_mail('Verify email',
-              from_email=settings.EMAIL_BACKEND,
-              recipient_list=[user.email],
-              fail_silently=True,
-              html_message=message)
+    # send_mail('Verify email',
+    #           from_email=settings.EMAIL_BACKEND,
+    #           recipient_list=[user.email],
+    #           fail_silently=True,
+    #           html_message=message)
     # email = MIMEText(message, 'html')
     # email['to'] = user.email
     # email['from'] = settings.EMAIL_BACKEND
     # email['subject'] = 'Verify email'
-    # email = EmailMessage(
-    #     'Verify email',
-    #     message,
-    #     to=[user.email],
-    # )
-    # email.content_subtype = 'html'
-    # email.send()
+    email = EmailMessage(
+        'Verify email',
+        message,
+        to=[user.email],
+    )
+    email.content_subtype = 'html'
+    email.send()
 
 
 def get_icon_temlate(url):
