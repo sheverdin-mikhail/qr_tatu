@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.urls import reverse
 
-from .utils import get_icon_temlate
+from .utils import get_icon_template
 
 
 class Subscription(models.Model):
@@ -162,7 +162,7 @@ class UserLinks(models.Model):
 
     def save(self):
         url = self.link
-        self.link_icon = get_icon_temlate(url)
+        self.link_icon = get_icon_template(url)
         return super().save()
 
 

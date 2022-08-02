@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import (
     UserCreationForm,
-    AuthenticationForm
+    AuthenticationForm, PasswordResetForm
 )
 from django.core.exceptions import ValidationError
 from django import forms
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 from .models import User, UserLinks
 from .utils import send_email_for_verify
@@ -52,3 +54,20 @@ class AddLinkForm(forms.ModelForm):
     class Meta:
         model = UserLinks
         fields = ('link', 'button_text')
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        """
+        Send a django.core.mail.EmailMessage to `to_email`.
+        """
+        subject = render_to_string(subject_template_name, context)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        body = render_to_string(email_template_name, context)
+
+        email_message = EmailMessage(subject, body, from_email, [to_email])
+        email_message.content_subtype = 'html'
+        email_message.send()
