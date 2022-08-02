@@ -13,7 +13,7 @@ from django.conf import settings
 from random import choice
 from qr_code.views import serve_qr_code_image
 
-from .forms import RegisterForm, LoginForm, PersonalInfoForm, AddLinkForm
+from .forms import RegisterForm, LoginForm, PersonalInfoForm, AddLinkForm, CustomPasswordResetForm
 from .utils import send_email_for_verify
 from .models import User, Subscription, QrCode, UserLinks
 
@@ -233,6 +233,7 @@ class ChangeSub(View):
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'main/index.html'
     email_template_name = 'personal/password_reset_email.html'
+    form_class = CustomPasswordResetForm
 
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):

@@ -3,6 +3,7 @@ from django.contrib.auth.forms import (
     UserCreationForm,
     AuthenticationForm, PasswordResetForm
 )
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django import forms
 from django.core.mail import EmailMessage
@@ -63,11 +64,13 @@ class CustomPasswordResetForm(PasswordResetForm):
         """
         Send a django.core.mail.EmailMessage to `to_email`.
         """
-        subject = render_to_string(subject_template_name, context)
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        body = render_to_string(email_template_name, context)
-
-        email_message = EmailMessage(subject, body, from_email, [to_email])
+        subject = 'Смена пароля'
+        message = render_to_string(
+            'personal/password_reset_email.html',
+            context=context
+        )
+        email_message = EmailMessage(subject, message, from_email, [to_email])
         email_message.content_subtype = 'html'
         email_message.send()
+
+
