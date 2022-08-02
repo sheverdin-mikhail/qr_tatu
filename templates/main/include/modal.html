@@ -354,8 +354,7 @@
       $('#passwordResetDone').modal('toggle');
     }
     
-
-    if ('/reset/MQ/set-password/' == '{{ request.path }}') {
+    if (window.location.pathname.split('/').includes('set-password') ) {
       $('#passwordResetConfirm').modal('toggle');
       
     }
