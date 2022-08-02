@@ -2,7 +2,8 @@ import re
 
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth import authenticate, login, views, get_user_model
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
@@ -55,9 +56,9 @@ class PersonalCabinet(View):
         # qr_codes = QrCode.objects.all()
         qr_codes = (
             QrCode.objects
-                .select_related('link_active')
-                .filter(user=user)
-                .prefetch_related('link_list')
+            .select_related('link_active')
+            .filter(user=user)
+            .prefetch_related('link_list')
         )
         form = PersonalInfoForm(instance=user)
         add_link_form = AddLinkForm
@@ -224,7 +225,38 @@ class DownloadQr(View):
 class ChangeSub(View):
 
     def get(self, request, *args, **kwargs):
-
         user = User.objects.get(pk=request.user.pk)
         user.save_sub(kwargs['sub_id'])
         return redirect('personal')
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'main/index.html'
+    email_template_name = 'personal/password_reset_email.html'
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'main/index.html'
+    title = 'Заявка на сброс пароля'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'main/index.html'
+    title = 'Смена пароля'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     if self.validlink:
+    #         context['validlink'] = True
+    #     else:
+    #         context.update({
+    #             'form': None,
+    #             'title': _('Password reset unsuccessful'),
+    #             'validlink': False,
+    #         })
+    #     return context
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'main/index.html'
+    title = 'Успешная смена пароля'

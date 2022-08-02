@@ -6,7 +6,7 @@ urlpatterns = [
     path('signup/', views.PersonalRegister.as_view(), name='signup'),
     path('login/', views.PersonalLogin.as_view(), name='login'),
     path('verify_email/',
-         TemplateView.as_view(template_name='personal/confirm_email.html'),
+         TemplateView.as_view(template_name='main/index.html'),
          name='verify_email'
          ),
     path('verify_email_confirm/<uidb64>/<token>/', views.VerifyEmailConfirm.as_view(),
@@ -27,4 +27,9 @@ urlpatterns = [
     path('download_qr/', views.DownloadQr.as_view(), name='download_qr'),
     path('change_sub/<int:sub_id>/', views.ChangeSub.as_view(), name='change_sub'),
 
+
+    path('password_reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]

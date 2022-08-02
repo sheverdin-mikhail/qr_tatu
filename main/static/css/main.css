@@ -1578,8 +1578,7 @@ footer .btn-outline-dark:hover {
 
 .verify{
     display: flex;
-    flex-direction: column;
-    padding: 50px;
+    flex-direction: column;    
 }
 .verify__header{
     font-family: 'Montserrat';
