@@ -21,18 +21,18 @@
             <div class="col-xl-1"></div>
             <div class="user-nav col-md-4 col-xl-3 pr-md-0">
               <select id="mobileNav" class="form-select d-block d-md-none" aria-label="Navigation menu">
-                <option id="selectCodeLink" data-select="selectCode" selected>Выбор QR-кода</option>
-                <option id="userProfileLink" data-select="userProfile">Мои данные</option>
-                <option id="qrSettingLink" data-select="qrSetting">QR-код</option>
-                <option id="userSubscriptionLink" data-select="userSubscription">Ваша подписка</option>
-                <option id="userSiteLink" data-select="userSite">Мой сайт</option>
+                <option  data-select="selectCode" selected>Выбор QR-кода</option>
+                <option  data-select="userProfile">Мои данные</option>
+                <option  data-select="qrSetting">QR-код</option>
+                <option  data-select="userSubscription">Ваша подписка</option>
+                <option  data-select="userSite">Мой сайт</option>
               </select>
               <div class="d-none d-md-flex flex-column">
-                <button class="pc-nav-item active" type="button" data-select="selectCode">Выбор QR-кода</button>
-                <button class="pc-nav-item" type="button" data-select="userProfile">Мои данные</button>
-                <button class="pc-nav-item" type="button" data-select="qrSetting">QR-код</button>
-                <button class="pc-nav-item" type="button" data-select="userSubscription">Ваша подписка</button>
-                <button class="pc-nav-item" type="button" data-select="userSite">Мой сайт</button>
+                <button id="selectCodeLink" class="pc-nav-item active" type="button" data-select="selectCode">Выбор QR-кода</button>
+                <button id="userProfileLink" class="pc-nav-item" type="button" data-select="userProfile">Мои данные</button>
+                <button id="qrSettingLink" class="pc-nav-item" type="button" data-select="qrSetting">QR-код</button>
+                <button id="userSubscriptionLink" class="pc-nav-item" type="button" data-select="userSubscription">Ваша подписка</button>
+                <button id="userSiteLink" class="pc-nav-item" type="button" data-select="userSite">Мой сайт</button>
               </div>
             </div>
             <div class="user-controls col-md-8 col-xl-7 pl-lg-4">
@@ -101,8 +101,9 @@
               </div>
               <div class="controls-item" id="qrSetting">
                 {{ add_error }}
-                <p class="subscribe-status mb-1">Ваша подписка:<span class="ml-4"> Бесплатная</span></p>
-                <p class="subscribe-status-caption mb-3 mb-md-5">Доступно только {{ subscription.qr_count }} QR-код{% if subscription.qr_count > 1 %}ов{% endif %}</p>
+                <p class="subscribe-status mb-1">Ваша подписка:<span class="ml-4">{{ user.subscription.name }} </span></p>
+                <p class="subscribe-status-caption mb-3 mb-md-5">Доступно только {{ subscription.qr_count }}
+                   QR-код{% if subscription.qr_count > 1 %}ов{% endif %}</p>
                 {% for qr in qr_codes %}
                   <div class="qr_row">
                     <p class="qr-number">QR{{ forloop.counter }}</p>
@@ -297,22 +298,24 @@
       </div>
     </section>
     {% include 'main/include/footer.html' %}
+    {% url 'add_qr' as add_qr_url %}
     <script>
-      var dateMask = IMask(
-      document.getElementById('validationDefault05'), {
-        mask: '+7 (000) 000-00-00',
-        lazy: true,
-      });
-      {% url 'add_qr' as add_qr %}
+      
       $(document).ready(function(){
-          if('{{ add_qr }}' == '{{ request.path }}'){
-             $('#qrSettingLink').trigger('click');
+          if('{{ add_qr_url }}' == '{{ request.path }}'){
+            $('#qrSettingLink').trigger('click')
           }
           $('.addLinkButton').on('click', function(){
             console.log('clicked')
             var pk = $(this).closest('.qr_row').find('#qrPk').text()
             $('#qrPk_input').val(pk)
           })
+
+          var dateMask = IMask(
+          document.getElementById('validationDefault05'), {
+            mask: '+7 (000) 000-00-00',
+            lazy: true,
+          });
       })
 
     </script>
