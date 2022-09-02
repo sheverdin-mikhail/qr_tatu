@@ -311,10 +311,9 @@
             $('#qrPk_input').val(pk)
           })
 
-          var dateMask = IMask(
+          var phoneMask = IMask(
           document.getElementById('validationDefault05'), {
-            mask: '+7 (000) 000-00-00',
-            lazy: true,
+            mask: '+{7}(000)000-00-00'
           });
       })
 

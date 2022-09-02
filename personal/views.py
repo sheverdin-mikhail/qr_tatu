@@ -99,7 +99,7 @@ class PersonalLogin(LoginView):
 class ChangeInfo(View):
     def post(self, request):
         form = PersonalInfoForm(data=request.POST or None)
-        info = request.user
+        info = User.objects.get(id=request.user.id)
         if form.is_valid():
             info.first_name = form.cleaned_data.get('first_name')
             info.last_name = form.cleaned_data.get('last_name')
