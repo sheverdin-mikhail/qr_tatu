@@ -2,9 +2,16 @@
 *~
 __pycache__
 venv
-/static
+db.sqlite3
+**/static
+/media
 .DS_Store
 local_settings.py
 prod_settings.py
 settings2.py
 deploy.txt
+token.txt
+/config
+**/migrations/**
+!**/migrations/__init__.py
+**/migrations
