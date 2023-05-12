@@ -33,8 +33,6 @@ volumes:
   qr_tatu_db_data:
 
 
-
-
 networks:
   app-network:
     external: true
