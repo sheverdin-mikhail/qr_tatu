@@ -1,0 +1,40 @@
+version: '3'
+
+services: 
+ 
+  qr_tatu: 
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    command: gunicorn qr_tatu.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    restart: unless-stopped
+    volumes:
+    - qr_tatu_static:/home/app/qr_tatu/static
+    - qr_tatu_media:/home/app/qr_tatu/media 
+    env_file:
+      - .env.prod
+    depends_on:
+      - qr_tatu_db 
+
+
+  qr_tatu_db:
+    image: postgres:12-alpine
+    volumes:
+      - qr_tatu_db_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod.db
+    restart: unless-stopped
+
+volumes:
+  qr_tatu_static:
+  qr_tatu_media:
+  qr_tatu_db_data:
+
+
+
+
+networks:
+  app-network:
+    external: true
