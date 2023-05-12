@@ -4,17 +4,17 @@ services:
  
   qr_tatu: 
     build: 
-      context: ./qr_tatu
+      context: .
       dockerfile: Dockerfile
     command: gunicorn qr_tatu.wsgi:application --bind 0.0.0.0:8000
     ports:
       - 8000:8000
     restart: unless-stopped
     volumes:
-    - qr_tatu_static:/home/app/qr_tatu/main/static
+    - qr_tatu_static:/home/app/qr_tatu/static
     - qr_tatu_media:/home/app/qr_tatu/media 
     env_file:
-      - ./qr_tatu/.env.prod
+      - .env.prod
     depends_on:
       - qr_db 
 
@@ -24,7 +24,7 @@ services:
     volumes:
       - qr_tatu_db_data:/var/lib/postgresql/data/
     env_file:
-      - ./qr_tatu/.env.prod.db
+      - .env.prod.db
     restart: unless-stopped
 
 volumes:
