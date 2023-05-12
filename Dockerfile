@@ -46,6 +46,6 @@ RUN pip install --no-cache /wheels/*
 
 COPY . $APP_HOME
 
-# RUN chown -R app $APP_HOME
+RUN chown -R app $APP_HOME
 
-# USER app
+USER app
